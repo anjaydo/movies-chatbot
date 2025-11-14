@@ -16,7 +16,7 @@ Hệ thống chatbot AI thông minh về phim ảnh sử dụng RAG (Retrieval-A
 
 Dự án sử dụng kiến trúc Big Data với các thành phần chính:
 
-- **Data Sources**: TMDB API, OpenSubtitles API, CSV files
+- **Data Sources**: TMDB API, [OpenSubtitles](https://drive.google.com/drive/folders/12HdMMLtxM9I7GUakRFgAS8IrULzQmGKD?usp=sharing) API, CSV files
 - **Data Lakehouse**: S3/MinIO (Bronze/Silver/Gold layers)
 - **Batch Processing**: Apache Spark (ETL, embeddings, WR computation)
 - **Online Stores**: PostgreSQL (metadata), ChromaDB (vector embeddings)
