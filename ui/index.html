@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Movie Chatbot</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background: #f4f6f9;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px 20px 40px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 10px;
+      font-size: 26px;
+    }
+
+    #chat {
+      flex: 1;
+      overflow-y: auto;
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .exchange {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    .message {
+      padding: 10px 16px;
+      border-radius: 18px;
+      max-width: 80%;
+      word-wrap: break-word;
+      line-height: 1.4;
+      display: inline-block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .user {
+      background: #007bff;
+      color: white;
+      align-self: flex-end;
+      margin-left: auto;
+    }
+
+    .bot {
+      background: #e9ecef;
+      color: #2c3e50;
+      align-self: flex-start;
+    }
+
+    .typing {
+      font-style: italic;
+      color: #888;
+    }
+
+    .input-area {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    input {
+      flex: 1;
+      padding: 14px;
+      border: 1px solid #ddd;
+      border-radius: 25px;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    input:focus {
+      border-color: #007bff;
+    }
+
+    button {
+      padding: 14px 24px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background: #218838;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎬 Movie Chatbot</h1>
+    <div id="chat"></div>
+    <div class="input-area">
+      <input type="text" id="input" placeholder="Ask about movies, quotes, or suggestions..." />
+      <button onclick="send()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const chat = document.getElementById("chat");
+    const input = document.getElementById("input");
+
+    async function send() {
+      const q = input.value.trim();
+      if (!q) return;
+      input.value = "";
+
+      // Tạo nhóm hội thoại (exchange)
+      const exchange = document.createElement("div");
+      exchange.className = "exchange";
+
+      // Câu hỏi của user
+      const userMsg = document.createElement("div");
+      userMsg.className = "message user";
+      userMsg.textContent = q;
+      exchange.appendChild(userMsg);
+
+      // Bot đang gõ
+      const botTyping = document.createElement("div");
+      botTyping.className = "message bot typing";
+      botTyping.textContent = "AI đang suy nghĩ...";
+      exchange.appendChild(botTyping);
+
+      chat.appendChild(exchange);
+      chat.scrollTop = chat.scrollHeight;
+
+      try {
+        const res = await fetch(`/chat?q=${encodeURIComponent(q)}`);
+        const data = await res.json();
+        botTyping.classList.remove("typing");
+        botTyping.textContent = data.response;
+      } catch (e) {
+        botTyping.classList.remove("typing");
+        botTyping.textContent = "Lỗi kết nối. Vui lòng thử lại.";
+      }
+
+      chat.scrollTop = chat.scrollHeight;
+
+      // Auto resize nếu trong Metabase
+      if (window.parent !== window) {
+        const height = document.body.scrollHeight;
+        window.parent.postMessage({ frameHeight: height }, "*");
+      }
+    }
+
+    input.addEventListener("keypress", e => {
+      if (e.key === "Enter") send();
+    });
+
+    window.onload = () => {
+      if (window.parent !== window) {
+        const height = document.body.scrollHeight;
+        window.parent.postMessage({ frameHeight: height }, "*");
+      }
+    };
+  </script>
+</body>
+</html>
