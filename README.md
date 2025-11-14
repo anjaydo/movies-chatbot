@@ -2,6 +2,8 @@
 
 Hệ thống chatbot AI thông minh về phim ảnh sử dụng RAG (Retrieval-Augmented Generation), tích hợp với dashboard Metabase để hiển thị các biểu đồ và thống kê trực quan. Ứng dụng có thể được nhúng vào Metabase thông qua iframe.
 
+<img src="https://raw.githubusercontent.com/anjaydo/movies-chatbot/refs/heads/main/images/Dashboard.png" alt="Chatbot Dashboard">
+
 ## 🎯 Chức năng
 
 - **Tìm phim bằng đoạn thoại (quote)**: Tìm kiếm phim dựa trên câu thoại nổi tiếng bằng semantic search
@@ -21,7 +23,7 @@ Dự án sử dụng kiến trúc Big Data với các thành phần chính:
 - **Serving Layer**: FastAPI (Recommendation Engine, RAG Chatbot)
 - **Consumption**: Web App/Chat UI, Metabase Dashboard (BI)
 
-Xem chi tiết kiến trúc tại: [`images/Architecture.png`](images/Architecture.png)
+<img src="https://raw.githubusercontent.com/anjaydo/movies-chatbot/refs/heads/main/images/Architecture.png" alt="Chatbot Architecture">
 
 ## 🛠️ Công nghệ
 
